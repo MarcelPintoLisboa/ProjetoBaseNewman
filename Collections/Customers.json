@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "7d8cc06f-9965-466f-8806-0252349754f6",
+		"name": "Customers - Protheus",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10775174"
+	},
+	"item": [
+		{
+			"name": "Get all",
+			"item": [
+				{
+					"name": "Get without parameters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"//Teste em hold pois o metodo Get all não será implementado por hora\r",
+									"\r",
+									"/*\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"*/"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests related to API queries with multiple results"
+		},
+		{
+			"name": "Get by ID",
+			"item": [
+				{
+					"name": "Get using nonexistent ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers/223456529",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"223456529"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests related to queries with only one data result"
+		},
+		{
+			"name": "Malformed Requests",
+			"item": [
+				{
+					"name": "Get with malformed query parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers?malformedRequest",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "malformedRequest",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Customer without body",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//incrementar o emp_ide para o proximo teste\r",
+									"var newValue = pm.collectionVariables.get(\"seq_codemp\");\r",
+									"newValue++\r",
+									"pm.collectionVariables.set(\"seq_codemp\", newValue);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}api/v1/customers",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests related to malformed requests (e.g., malformed URL, wrong request body attributes or types)"
+		},
+		{
+			"name": "Create, edit and delete",
+			"item": [
+				{
+					"name": "Create new Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//incrementar o emp_ide para o proximo teste\r",
+									"var newValue = pm.collectionVariables.get(\"seq_codemp\");\r",
+									"newValue++\r",
+									"pm.collectionVariables.set(\"seq_codemp\", newValue);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"A1_NREDUZ\": \"Teste POST customers\",\r\n    \"A1_NOME\": \"Teste POST customers\",\r\n    \"A1_END\": \"Rua Teste\",\r\n    \"A1_EST\": \"SP\",\r\n    \"A1_MUN\": \"Sao Paulo\",\r\n    \"A1_CGC\": \"19621148000171\",\r\n    \"A1_PESSOA\": \"J\",\r\n    \"A1_TIPO\": \"F\",\r\n    \"A1_XCODEMP\": \"{{seq_codemp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}api/v1/customers",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate new Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Customer's data is correct\", function () {\r",
+									"    pm.expect(jsonData.data.A1_NOME).to.be.eql(\"Teste POST customers\", \"Field A1_NOME\");\r",
+									"    pm.expect(jsonData.data.A1_NREDUZ).to.be.eql(\"Teste POST customers\", \"Field A1_NREDUZ\");\r",
+									"    pm.expect(jsonData.data.A1_END).to.be.eql(\"Rua Teste\", \"Field A1_END\");\r",
+									"    pm.expect(jsonData.data.A1_EST).to.be.eql(\"SP\", \"Field A1_EST\");\r",
+									"    pm.expect(jsonData.data.A1_MUN).to.be.eql(\"Sao Paulo\", \"Field A1_MUN\");\r",
+									"    pm.expect(jsonData.data.A1_CGC).to.be.eql(\"19621148000171\", \"Field A1_CGC\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers/{{seq_codemp}}",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{seq_codemp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"A1_NOME\": \"Teste PUT customer\",\r\n    \"A1_NREDUZ\": \"Teste PUT customer\",\r\n    \"A1_END\": \"Rua Teste Alteração\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}api/v1/customers/{{seq_codemp}}",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{seq_codemp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate updated Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Customer's data is correct\", function () {\r",
+									"    pm.expect(jsonData.data.A1_NOME).to.equal(\"Teste PUT customer\", \"Field A1_NOME\");\r",
+									"    pm.expect(jsonData.data.A1_NREDUZ).to.equal(\"Teste PUT customer\", \"Field A1_NREDUZ\");\r",
+									"    pm.expect(jsonData.data.A1_END).to.equal(\"Rua Teste Alteração\", \"Field A1_END\");\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers/{{seq_codemp}}",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{seq_codemp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers/{{seq_codemp}}",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{seq_codemp}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate deleted Customer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/v1/customers/{{seq_codemp}}",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"v1",
+								"customers",
+								"{{seq_codemp}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"/*const TokenExpiryTime = new Date(pm.environment.get(\"TOKEN_EXPIRATION\"));",
+					"const currentTime = new Date();",
+					"",
+					"//Em todo teste verifica se o token é valido. Se não for, gera um novo.",
+					"//if (currentTime >= TokenExpiryTime) {",
+					"    pm.sendRequest({",
+					"        url: pm.environment.get(\"TOKEN_URL\") + \"&username=\" + pm.environment.get(\"username\") + \"&password=\" + pm.environment.get(\"password\"),",
+					"        method: 'POST',",
+					"    }, function (err, res) {",
+					"        pm.environment.set(\"TOKEN\", res.json().access_token);",
+					"        pm.environment.set(\"TOKEN_EXPIRATION\", new Date(currentTime.getTime() + (res.json().expires_in * 1000)) )",
+					"    });",
+					"//};*/"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"var jsonData",
+					"var statusCode = pm.response.code;",
+					"var requestMethod = pm.request.method;",
+					"",
+					"if (![201, 204, 401, 404].includes(statusCode)) {",
+					"    jsonData = pm.response.json();",
+					"}",
+					"",
+					"switch (requestMethod) {",
+					"",
+					"    case \"GET\":",
+					"        if (typeof jsonData == \"object\") {",
+					"            pm.test(\"Response body format\", function () {",
+					"                if (statusCode == 200) {",
+					"                    if (typeof jsonData.data == \"array\") {",
+					"                        for (var i = 0; i < jsonData.data.length; i++) {",
+					"                            pm.expect(jsonData.data[i].A1_COD).to.be.a(\"string\", \"Field A1_COD\");",
+					"                            pm.expect(jsonData.data[i].A1_LOJA).to.be.a(\"string\", \"Field A1_LOJA\");",
+					"                            pm.expect(jsonData.data[i].A1_XCODEMP).to.be.a(\"string\", \"Field A1_XCODEMP\");",
+					"                        }",
+					"                    } else {",
+					"                        pm.expect(jsonData.data.A1_COD).to.be.a(\"string\", \"Field A1_COD\");",
+					"                        pm.expect(jsonData.data.A1_LOJA).to.be.a(\"string\", \"Field A1_LOJA\");",
+					"                        pm.expect(jsonData.data.A1_XCODEMP).to.be.a(\"string\", \"Field A1_XCODEMP\");",
+					"                    };",
+					"                    if (jsonData.hasOwnProperty(\"metadata\")) {",
+					"                        var jsonMetadata = pm.response.json().metadata;",
+					"                        pm.expect(jsonData.metadata).to.be.an(\"object\", \"Attribute 'metadata'\");",
+					"                        pm.expect(jsonMetadata.sort).to.be.a(\"string\", \"Attribute 'metadata.sort'\");",
+					"                        pm.expect(jsonMetadata.pagination.page).to.be.a(\"number\", \"Attribute 'metadata.page'\");",
+					"                        pm.expect(jsonMetadata.pagination.pageSize).to.be.a(\"number\", \"Attribute 'metadata.pageSize'\");",
+					"                        pm.expect(jsonMetadata.pagination.pageCount).to.be.a(\"number\", \"Attribute 'metadata.pageCount'\");",
+					"                        pm.expect(jsonMetadata.pagination.totalCount).to.be.a(\"number\", \"Attribute 'metadata.totalCount'\");",
+					"                    };",
+					"                    pm.expect(jsonData.success).to.be.eql(true, \"Attribute 'success'\");",
+					"                };",
+					"                //validação para status de erro",
+					"                if ([400, 422].includes(statusCode)) {",
+					"                    var jsonErrors = pm.response.json().errors;",
+					"                    pm.expect(jsonData.errors).to.be.an(\"array\", \"Attribute 'errors'\");",
+					"                    pm.expect(jsonErrors.key).to.be.a(\"string\", \"Attribute 'errors.key'\");",
+					"                    pm.expect(jsonErrors.message).to.be.a(\"string\", \"Attribute 'errors.message'\");",
+					"                    pm.expect(jsonData.success).to.be.eql(false, \"Attribute 'success'\");",
+					"                };",
+					"            });",
+					"        }",
+					"",
+					"        break;",
+					"",
+					"    case \"POST\":",
+					"",
+					"        pm.test(\"Response body format\", function () {",
+					"            if (statusCode == 201) {",
+					"                var jsonData = pm.response.json();",
+					"                pm.expect(+jsonData.A1_XCODEMP).to.be.eql(+pm.collectionVariables.get(\"seq_codemp\"));",
+					"            };",
+					"        });",
+					"",
+					"        break;",
+					"",
+					"    case \"PUT\":",
+					"",
+					"        break;",
+					"",
+					"    case \"DELETE\":",
+					"",
+					"        break;",
+					"};"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "seq_codemp",
+			"value": "223456525",
+			"type": "string"
+		}
+	]
+}
