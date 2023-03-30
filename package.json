@@ -1,0 +1,16 @@
+{
+  "name": "nome-da-api",
+  "version": "1.0.0",
+  "description": "Testes das APIs xpto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nome_collection": "newman run Collections/nome_collection.json -e Environments/nome_ambiente.json -r htmlextra -x 1"
+  },
+  "author": "Nome autor",
+  "license": "ISC",
+  "dependencies": {
+    "newman": "^5.3.2",
+    "newman-reporter-htmlextra": "^1.22.11"
+  }
+}
